@@ -2,6 +2,8 @@ package com.julia.controlefinanceiro.controller;
 
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.service.TransacaoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,28 +18,47 @@ public class TransacaoController {
     }
 
     @GetMapping("/transacoes")
-    public List<Transacao> listarTransacoes(){
-        return service.listarTransacoes();
+    public ResponseEntity<List<Transacao>> listarTransacoes(){
+        List<Transacao> transacoes = service.listarTransacoes();
+        if(!transacoes.isEmpty()){
+            return ResponseEntity.ok(transacoes);
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/transacoes/{id}")
-    public Transacao buscarTransacao(@PathVariable Long id){
-        return service.buscarTransacao(id);
+    public ResponseEntity<Transacao> buscarTransacao(@PathVariable Long id){
+
+        Transacao transacao = service.buscarTransacao(id);
+        if(transacao!=null){
+            return ResponseEntity.ok(transacao);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/transacoes")
-    public Transacao adicionarNovaTransacao(@RequestBody Transacao novaTransacao){
-        return service.adicionarNovaTransacao(novaTransacao);
+    public ResponseEntity<Transacao> adicionarNovaTransacao(@RequestBody Transacao novaTransacao){
+        Transacao transacao = service.adicionarNovaTransacao(novaTransacao);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(transacao);
     }
 
     @PutMapping("/transacoes/{id}")
-    public Transacao editarTransacao(@PathVariable Long id,
+    public ResponseEntity<Transacao> editarTransacao(@PathVariable Long id,
                                      @RequestBody Transacao transacaoAlterada){
-        return service.editarTransacao(id, transacaoAlterada);
+        Transacao transacao = service.editarTransacao(id, transacaoAlterada);
+        if(transacao!=null){
+            return ResponseEntity.ok(transacao);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/transacoes/{id}")
-    public Transacao deletarTransacao(@PathVariable Long id){
-        return service.deletarTransacao(id);
+    public ResponseEntity<Transacao> deletarTransacao(@PathVariable Long id){
+        Transacao transacao = service.deletarTransacao(id);
+        if(transacao!=null){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
