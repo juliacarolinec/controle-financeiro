@@ -1,5 +1,7 @@
 package com.julia.controlefinanceiro.service;
 
+import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
+import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
@@ -23,27 +25,60 @@ public class TransacaoService {
         return repository.findById(id).orElse(null);
     }
 
-    public Transacao adicionarNovaTransacao(Transacao novaTransacao){
-        return repository.save(novaTransacao);
+    public TransacaoResponseDTO adicionarNovaTransacao(TransacaoRequestDTO novaTransacao) {
+
+        Transacao transacao = new Transacao();
+
+        transacao.setDescricao(novaTransacao.getDescricao());
+        transacao.setValor(novaTransacao.getValor());
+        transacao.setTipo(novaTransacao.getTipo());
+        transacao.setData(novaTransacao.getData());
+
+        Transacao salva = repository.save(transacao);
+
+        TransacaoResponseDTO response = new TransacaoResponseDTO();
+
+        response.setId(salva.getId());
+        response.setDescricao(salva.getDescricao());
+        response.setValor(salva.getValor());
+        response.setTipo(salva.getTipo());
+        response.setData(salva.getData());
+
+        return response;
     }
 
-    public Transacao editarTransacao(Long id,
-                                     Transacao transacaoAlterada){
+    public TransacaoResponseDTO editarTransacao(
+            Long id,
+            TransacaoRequestDTO transacaoAlterada) {
+
         Transacao transacao = repository.findById(id).orElse(null);
-        if(transacao!=null){
+
+        if (transacao != null) {
+
             transacao.setData(transacaoAlterada.getData());
             transacao.setDescricao(transacaoAlterada.getDescricao());
             transacao.setTipo(transacaoAlterada.getTipo());
             transacao.setValor(transacaoAlterada.getValor());
 
-            return repository.save(transacao);
+            Transacao atualizada = repository.save(transacao);
+
+            TransacaoResponseDTO response = new TransacaoResponseDTO();
+
+            response.setId(atualizada.getId());
+            response.setDescricao(atualizada.getDescricao());
+            response.setValor(atualizada.getValor());
+            response.setTipo(atualizada.getTipo());
+            response.setData(atualizada.getData());
+
+            return response;
         }
+
         return null;
     }
 
     public Transacao deletarTransacao(Long id){
         Transacao transacao = repository.findById(id).orElse(null);
-        if(transacao!=null){
+        if(transacao != null){
             repository.delete(transacao);
             return transacao;
         }

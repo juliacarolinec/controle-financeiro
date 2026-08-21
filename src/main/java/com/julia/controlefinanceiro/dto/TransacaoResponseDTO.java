@@ -1,31 +1,15 @@
-package com.julia.controlefinanceiro.model;
+package com.julia.controlefinanceiro.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import com.julia.controlefinanceiro.model.Tipo;
 
 import java.time.LocalDate;
 
-@Entity
-public class Transacao {
-
-    @Id
-    @GeneratedValue
+public class TransacaoResponseDTO {
     private Long id;
-    @NotBlank
     private String descricao;
-    @Positive
-    @NotNull
     private Double valor;
-    @Enumerated(EnumType.STRING)
-    @NotNull
     private Tipo tipo;
-    @NotNull
     private LocalDate data;
-
-    public Transacao() {
-    }
 
     public Long getId() {
         return id;
