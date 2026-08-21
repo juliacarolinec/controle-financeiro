@@ -26,9 +26,6 @@ Git & GitHub
 Arquitetura em camadas
 API REST
 CRUD
-DTOs (Data Transfer Objects)
-Validação de dados com Bean Validation
-Tratamento global de exceções
 
 🎯 Objetivo
 
