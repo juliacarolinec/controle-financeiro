@@ -1,5 +1,6 @@
 package com.julia.controlefinanceiro.service;
 
+import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
 import com.julia.controlefinanceiro.model.Tipo;
@@ -92,5 +93,30 @@ public class TransacaoService {
 
     public List<Transacao> pesquisarPorData(LocalDate data){
         return repository.findByData(data);
+    }
+
+    public SaldoResponseDTO calcularSaldo(){
+        List<Transacao> receitas = repository.findByTipo(Tipo.RECEITA);
+        List<Transacao> despesas = repository.findByTipo(Tipo.DESPESA);
+        double totalReceitas = 0;
+        double totalDespesas = 0;
+
+        for(Transacao transacao : receitas){
+            totalReceitas += transacao.getValor();
+        }
+
+        for(Transacao transacao : despesas){
+            totalDespesas += transacao.getValor();
+        }
+
+        double saldo = totalReceitas - totalDespesas;
+
+        SaldoResponseDTO response = new SaldoResponseDTO();
+
+        response.setReceitas(totalReceitas);
+        response.setDespesas(totalDespesas);
+        response.setSaldo(saldo);
+
+        return response;
     }
 }

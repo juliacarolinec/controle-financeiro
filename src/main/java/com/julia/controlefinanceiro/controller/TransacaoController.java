@@ -1,5 +1,6 @@
 package com.julia.controlefinanceiro.controller;
 
+import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
 import com.julia.controlefinanceiro.model.Tipo;
@@ -76,4 +77,8 @@ public class TransacaoController {
         return service.pesquisarPorData(data);
     }
 
+    @GetMapping("/transacoes/saldo")
+    public SaldoResponseDTO calcularSaldo(){
+        return service.calcularSaldo();
+    }
 }
