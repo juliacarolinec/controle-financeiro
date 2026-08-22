@@ -2,13 +2,14 @@ package com.julia.controlefinanceiro.controller;
 
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
+import com.julia.controlefinanceiro.model.Tipo;
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.service.TransacaoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -64,4 +65,15 @@ public class TransacaoController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/transacoes/tipo/{tipo}")
+    public List<Transacao> pesquisarPorTipo(@PathVariable Tipo tipo){
+        return service.pesquisarPorTipo(tipo);
+    }
+
+    @GetMapping("/transacoes/data")
+    public List<Transacao> pesquisarPorData(@RequestParam LocalDate data){
+        return service.pesquisarPorData(data);
+    }
+
 }

@@ -2,10 +2,11 @@ package com.julia.controlefinanceiro.service;
 
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
+import com.julia.controlefinanceiro.model.Tipo;
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -83,5 +84,13 @@ public class TransacaoService {
             return transacao;
         }
         return null;
+    }
+
+    public List<Transacao> pesquisarPorTipo(Tipo tipo){
+        return repository.findByTipo(tipo);
+    }
+
+    public List<Transacao> pesquisarPorData(LocalDate data){
+        return repository.findByData(data);
     }
 }
