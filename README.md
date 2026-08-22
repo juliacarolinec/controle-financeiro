@@ -1,4 +1,4 @@
-💰 API de Controle Financeiro
+# 💰 API de Controle Financeiro
 
 API REST desenvolvida com Java e Spring Boot para gerenciamento de finanças pessoais.
 
