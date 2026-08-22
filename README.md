@@ -26,6 +26,15 @@ Git & GitHub
 Arquitetura em camadas
 API REST
 CRUD
+DTOs (Request e Response)
+Validação de dados
+Injeção de dependência
+Spring Data JPA
+ResponseEntity e códigos HTTP
+Filtros por tipo e data
+Enum
+Cálculo de saldo
+Tratamento global de exceçõe
 
 🎯 Objetivo
 
