@@ -123,4 +123,30 @@ public class TransacaoService {
 
         return response;
     }
+
+    public SaldoResponseDTO calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim){
+        List<Transacao> transacoes = repository.findByDataBetween(inicio, fim);
+        double totalReceitas = 0;
+        double totalDespesas = 0;
+
+        for(Transacao transacao : transacoes) {
+            if (transacao.getTipo() == Tipo.RECEITA) {
+                totalReceitas += transacao.getValor();
+            }
+
+            if (transacao.getTipo() == Tipo.DESPESA) {
+                totalDespesas += transacao.getValor();
+            }
+        }
+
+        double saldo = totalReceitas - totalDespesas;
+
+        SaldoResponseDTO response = new SaldoResponseDTO();
+        response.setReceitas(totalReceitas);
+        response.setDespesas(totalDespesas);
+        response.setSaldo(saldo);
+
+        return response;
+        }
+
 }

@@ -86,4 +86,10 @@ public class TransacaoController {
     public SaldoResponseDTO calcularSaldo(){
         return service.calcularSaldo();
     }
+
+    @GetMapping("/transacoes/saldo/periodo")
+    public SaldoResponseDTO calcularSaldoPorPeriodo(@RequestParam LocalDate inicio,
+                                                    @RequestParam LocalDate fim){
+        return service.calcularSaldoPorPeriodo(inicio, fim);
+    }
 }
