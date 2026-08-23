@@ -1,4 +1,4 @@
-💰 API de Controle Financeiro
+# 💰 API de Controle Financeiro
 
 API REST desenvolvida com Java e Spring Boot para gerenciamento de finanças pessoais.
 
@@ -14,18 +14,30 @@ Consulta do saldo financeiro
 
 Novas funcionalidades serão adicionadas conforme a evolução do projeto.
 
-🛠️ Tecnologias
-Java
-Spring Boot
-Spring Web
-Spring Data JPA
-H2 Database
-Maven
-Git & GitHub
-📌 Conceitos aplicados
-Arquitetura em camadas
-API REST
-CRUD
+### 🛠️ Tecnologias
+
+- Java
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- H2 Database
+- Maven
+- Git & GitHub
+
+### 📌 Conceitos aplicados
+
+- Arquitetura em camadas
+- API REST
+- CRUD
+- DTOs (Request e Response)
+- Validação de dados
+- Injeção de dependência
+- Spring Data JPA
+- ResponseEntity e códigos HTTP
+- Filtros por tipo e data
+- Enum
+- Cálculo de saldo
+- Tratamento global de exceções
 
 🎯 Objetivo
 
