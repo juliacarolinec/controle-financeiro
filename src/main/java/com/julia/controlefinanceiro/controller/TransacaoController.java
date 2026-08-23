@@ -77,6 +77,11 @@ public class TransacaoController {
         return service.pesquisarPorData(data);
     }
 
+    @GetMapping("/transacoes/periodo")
+    public List<Transacao> pesquisarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+        return service.pesquisarPorPeriodo(inicio, fim);
+    }
+
     @GetMapping("/transacoes/saldo")
     public SaldoResponseDTO calcularSaldo(){
         return service.calcularSaldo();

@@ -95,6 +95,10 @@ public class TransacaoService {
         return repository.findByData(data);
     }
 
+    public List<Transacao> pesquisarPorPeriodo(LocalDate inicio, LocalDate fim){
+        return repository.findByDataBetween(inicio,fim);
+    }
+
     public SaldoResponseDTO calcularSaldo(){
         List<Transacao> receitas = repository.findByTipo(Tipo.RECEITA);
         List<Transacao> despesas = repository.findByTipo(Tipo.DESPESA);
