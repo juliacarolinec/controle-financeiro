@@ -7,6 +7,8 @@ import com.julia.controlefinanceiro.model.Tipo;
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.service.TransacaoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,8 @@ public class TransacaoController {
     }
 
     @GetMapping("/transacoes")
-    public ResponseEntity<List<Transacao>> listarTransacoes(){
-        List<Transacao> transacoes = service.listarTransacoes();
+    public ResponseEntity<Page<Transacao>> listarTransacoes(Pageable pageable){
+        Page<Transacao> transacoes = service.listarTransacoes(pageable);
         if(!transacoes.isEmpty()){
             return ResponseEntity.ok(transacoes);
         }

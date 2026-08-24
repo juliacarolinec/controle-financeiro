@@ -9,6 +9,8 @@ import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class TransacaoService {
@@ -19,8 +21,8 @@ public class TransacaoService {
         this.repository = repository;
     }
 
-    public List<Transacao> listarTransacoes(){
-        return repository.findAll();
+    public Page<Transacao> listarTransacoes(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     public Transacao buscarTransacao(Long id){
