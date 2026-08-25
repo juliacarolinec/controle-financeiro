@@ -4,15 +4,34 @@ API REST desenvolvida com Java e Spring Boot para gerenciamento de finanças pes
 
 Este projeto está sendo desenvolvido com foco em aprendizado prático de desenvolvimento Back-End, aplicando conceitos de arquitetura, persistência de dados, validação e desenvolvimento de APIs REST.
 
-🚀 Funcionalidades
-Cadastro de receitas e despesas
-Consulta de movimentações financeiras
-Atualização de movimentações
-Exclusão de movimentações
-Validação dos dados
-Consulta do saldo financeiro
+### 🚀 Funcionalidades
+- Cadastro de receitas e despesas
+- Consulta de movimentações financeiras
+- Atualização de movimentações
+- Exclusão de movimentações
+- Validação dos dados
+- Consulta do saldo financeiro
+- Filtro por tipo e período
+- Paginação dos resultados
+- Filtros combinados com paginação
+- Cálculo de receitas, despesas e saldo por período
+- Validação do intervalo de datas
+- Tratamento global de exceções
 
-Novas funcionalidades serão adicionadas conforme a evolução do projeto.
+### 💡 Conceitos aplicados
+
+- Arquitetura em camadas
+- API REST
+- DTOs (Request e Response)
+- Spring Data JPA
+- Injeção de dependência
+- Validação de dados
+- Pageable
+- ResponseEntity
+- Enum
+- Códigos HTTP
+- Tratamento global de exceções
+
 
 ### 🛠️ Tecnologias
 
@@ -23,22 +42,7 @@ Novas funcionalidades serão adicionadas conforme a evolução do projeto.
 - H2 Database
 - Maven
 - Git & GitHub
-
-### 📌 Conceitos aplicados
-
-- Arquitetura em camadas
-- API REST
-- CRUD
-- DTOs (Request e Response)
-- Validação de dados
-- Injeção de dependência
-- Spring Data JPA
-- ResponseEntity e códigos HTTP
-- Filtros por tipo e data
-- Enum
-- Cálculo de saldo
-- Tratamento global de exceções
-
+  
 🎯 Objetivo
 
 Desenvolver uma aplicação Back-End completa, utilizando boas práticas de desenvolvimento e consolidando conhecimentos em Java, Spring Boot e desenvolvimento de APIs REST.
