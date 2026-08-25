@@ -151,4 +151,10 @@ public class TransacaoService {
         return response;
         }
 
+    public Page<Transacao> pesquisarPorTipoEPeriodo(Tipo tipo,
+                                                    LocalDate inicio,
+                                                    LocalDate fim,
+                                                    Pageable pageable){
+        return repository.findByTipoAndDataBetween(tipo, inicio, fim, pageable);
+    }
 }

@@ -94,4 +94,16 @@ public class TransacaoController {
                                                     @RequestParam LocalDate fim){
         return service.calcularSaldoPorPeriodo(inicio, fim);
     }
+
+    @GetMapping("/transacoes/filtro")
+    public ResponseEntity<Page<Transacao>> pesquisarPorTipoEPeriodo(@RequestParam Tipo tipo,
+                                                                    @RequestParam LocalDate inicio,
+                                                                    @RequestParam LocalDate fim,
+                                                                    Pageable pageable){
+        Page<Transacao> transacoes = service.pesquisarPorTipoEPeriodo(tipo, inicio, fim, pageable);
+        if(!transacoes.isEmpty()){
+            return ResponseEntity.ok(transacoes);
+        }
+        return ResponseEntity.noContent().build();
+    }
 }
