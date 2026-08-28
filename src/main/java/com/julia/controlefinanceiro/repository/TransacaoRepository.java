@@ -18,4 +18,5 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
             LocalDate fim,
             Pageable pageable
     );
+    boolean existsByCategoriaId(Long categoriaId);
 }

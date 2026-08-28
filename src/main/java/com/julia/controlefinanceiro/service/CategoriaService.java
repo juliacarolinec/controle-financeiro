@@ -5,6 +5,7 @@ import com.julia.controlefinanceiro.dto.CategoriaResponseDTO;
 import com.julia.controlefinanceiro.exception.CategoriaNotFoundException;
 import com.julia.controlefinanceiro.model.Categoria;
 import com.julia.controlefinanceiro.repository.CategoriaRepository;
+import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,13 @@ import java.util.List;
 @Service
 public class CategoriaService {
     private final CategoriaRepository repository;
+    private final TransacaoRepository transacaoRepository;
 
-    public CategoriaService(CategoriaRepository repository) {
+    public CategoriaService(CategoriaRepository repository, TransacaoRepository transacaoRepository) {
         this.repository = repository;
+        this.transacaoRepository = transacaoRepository;
     }
+
 
     public List<Categoria> listarCategorias() {
         return repository.findAll();
@@ -66,10 +70,12 @@ public class CategoriaService {
 
     }
 
-    public Categoria deletarCategoria(Long id) {
+    public void deletarCategoria(Long id) {
         Categoria categoria = repository.findById(id).orElseThrow(() ->
                 new CategoriaNotFoundException("Categoria não encontrada."));
+        if(transacaoRepository.existsByCategoriaId(id)){
+            throw new IllegalArgumentException("Não é possível excluir uma categoria que possui transações.");
+        }
         repository.delete(categoria);
-        return categoria;
     }
 }
