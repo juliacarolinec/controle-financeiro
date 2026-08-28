@@ -1,5 +1,6 @@
 package com.julia.controlefinanceiro.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,4 +37,23 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(error);
     }
+
+    @ExceptionHandler(CategoriaNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoriaNotFound(
+            CategoriaNotFoundException exception){
+
+        ErrorResponse error = new ErrorResponse(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(TransacaoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTransacaoNotFound(
+            TransacaoNotFoundException exception){
+
+        ErrorResponse error = new ErrorResponse(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
+

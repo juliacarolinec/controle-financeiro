@@ -2,6 +2,7 @@ package com.julia.controlefinanceiro.service;
 
 import com.julia.controlefinanceiro.dto.CategoriaRequestDTO;
 import com.julia.controlefinanceiro.dto.CategoriaResponseDTO;
+import com.julia.controlefinanceiro.exception.CategoriaNotFoundException;
 import com.julia.controlefinanceiro.model.Categoria;
 import com.julia.controlefinanceiro.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,19 @@ public class CategoriaService {
         this.repository = repository;
     }
 
-    public List<Categoria> listarCategorias(){
+    public List<Categoria> listarCategorias() {
         return repository.findAll();
     }
 
-    public Categoria buscarCategoria(Long id){
-        return repository.findById(id).orElse(null);
+    public Categoria buscarCategoria(Long id) {
+        return repository.findById(id).orElseThrow(() -> new CategoriaNotFoundException("Categoria não encontrada"));
     }
 
-    public CategoriaResponseDTO adicionarCategoria(CategoriaRequestDTO novaCategoria){
+    public CategoriaResponseDTO adicionarCategoria(CategoriaRequestDTO novaCategoria) {
+        if (repository.existsByNomeIgnoreCase(novaCategoria.getNome())) {
+            throw new IllegalArgumentException("Categoria já cadastrada.");
+        }
+
         Categoria categoria = new Categoria();
         categoria.setNome(novaCategoria.getNome());
 
@@ -38,27 +43,33 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO alterarCategoria(Long id,
-                                      CategoriaRequestDTO categoriaAlterada){
-        Categoria categoria = repository.findById(id).orElse(null);
-        if(categoria!=null){
-            categoria.setNome(categoriaAlterada.getNome());
-            Categoria atualizada = repository.save(categoria);
+                                                 CategoriaRequestDTO categoriaAlterada) {
+        Categoria categoria = repository.findById(id).orElseThrow(() ->
+                new CategoriaNotFoundException("Categoria não encontrada."));
 
-            CategoriaResponseDTO response = new CategoriaResponseDTO();
+        if (repository.existsByNomeIgnoreCaseAndIdNot(
+                categoriaAlterada.getNome(), id)) {
 
-            response.setNome(atualizada.getNome());
-            response.setId(atualizada.getId());
-
-            return response;
+            throw new IllegalArgumentException("Categoria já cadastrada.");
         }
-        return null;
+
+
+        categoria.setNome(categoriaAlterada.getNome());
+        Categoria atualizada = repository.save(categoria);
+
+        CategoriaResponseDTO response = new CategoriaResponseDTO();
+
+        response.setNome(atualizada.getNome());
+        response.setId(atualizada.getId());
+
+        return response;
+
     }
 
-    public Categoria deletarCategoria(Long id){
-        Categoria categoria = repository.findById(id).orElse(null);
-        if(categoria!=null){
-            repository.delete(categoria);
-        }
+    public Categoria deletarCategoria(Long id) {
+        Categoria categoria = repository.findById(id).orElseThrow(() ->
+                new CategoriaNotFoundException("Categoria não encontrada."));
+        repository.delete(categoria);
         return categoria;
     }
 }

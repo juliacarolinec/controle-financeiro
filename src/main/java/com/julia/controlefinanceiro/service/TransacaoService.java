@@ -3,14 +3,18 @@ package com.julia.controlefinanceiro.service;
 import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
+import com.julia.controlefinanceiro.exception.CategoriaNotFoundException;
+import com.julia.controlefinanceiro.exception.TransacaoNotFoundException;
 import com.julia.controlefinanceiro.model.Categoria;
 import com.julia.controlefinanceiro.model.Tipo;
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.repository.CategoriaRepository;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,12 +30,12 @@ public class TransacaoService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Page<Transacao> listarTransacoes(Pageable pageable){
+    public Page<Transacao> listarTransacoes(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
-    public Transacao buscarTransacao(Long id){
-        return repository.findById(id).orElse(null);
+    public Transacao buscarTransacao(Long id) {
+        return repository.findById(id).orElseThrow(() -> new TransacaoNotFoundException("Transação não encontrada."));
     }
 
     public TransacaoResponseDTO adicionarNovaTransacao(TransacaoRequestDTO novaTransacao) {
@@ -44,7 +48,7 @@ public class TransacaoService {
         transacao.setData(novaTransacao.getData());
         Categoria categoria = categoriaRepository
                 .findById(novaTransacao.getCategoriaId())
-                .orElse(null);
+                .orElseThrow(() -> new CategoriaNotFoundException("Categoria não encontrada."));
         transacao.setCategoria(categoria);
 
         Transacao salva = repository.save(transacao);
@@ -65,68 +69,64 @@ public class TransacaoService {
             Long id,
             TransacaoRequestDTO transacaoAlterada) {
 
-        Transacao transacao = repository.findById(id).orElse(null);
+        Transacao transacao = repository.findById(id).orElseThrow(() -> new TransacaoNotFoundException("Transação não encontrada."));
 
-        if (transacao != null) {
+        transacao.setData(transacaoAlterada.getData());
+        transacao.setDescricao(transacaoAlterada.getDescricao());
+        transacao.setTipo(transacaoAlterada.getTipo());
+        transacao.setValor(transacaoAlterada.getValor());
+        Categoria categoria = categoriaRepository.findById(transacaoAlterada.getCategoriaId())
+                .orElseThrow(() -> new CategoriaNotFoundException("Categoria não encontrada"));
+        transacao.setCategoria(categoria);
 
-            transacao.setData(transacaoAlterada.getData());
-            transacao.setDescricao(transacaoAlterada.getDescricao());
-            transacao.setTipo(transacaoAlterada.getTipo());
-            transacao.setValor(transacaoAlterada.getValor());
+        Transacao atualizada = repository.save(transacao);
 
-            Transacao atualizada = repository.save(transacao);
+        TransacaoResponseDTO response = new TransacaoResponseDTO();
 
-            TransacaoResponseDTO response = new TransacaoResponseDTO();
+        response.setId(atualizada.getId());
+        response.setDescricao(atualizada.getDescricao());
+        response.setValor(atualizada.getValor());
+        response.setTipo(atualizada.getTipo());
+        response.setData(atualizada.getData());
 
-            response.setId(atualizada.getId());
-            response.setDescricao(atualizada.getDescricao());
-            response.setValor(atualizada.getValor());
-            response.setTipo(atualizada.getTipo());
-            response.setData(atualizada.getData());
-
-            return response;
-        }
-
-        return null;
+        return response;
     }
 
-    public Transacao deletarTransacao(Long id){
-        Transacao transacao = repository.findById(id).orElse(null);
-        if(transacao != null){
-            repository.delete(transacao);
-            return transacao;
-        }
-        return null;
+    public Transacao deletarTransacao(Long id) {
+        Transacao transacao = repository.findById(id).orElseThrow(() -> new TransacaoNotFoundException("Transação não encontrada."));
+        repository.delete(transacao);
+        return transacao;
+
     }
 
-    public List<Transacao> pesquisarPorTipo(Tipo tipo){
+    public List<Transacao> pesquisarPorTipo(Tipo tipo) {
         return repository.findByTipo(tipo);
     }
 
-    public List<Transacao> pesquisarPorData(LocalDate data){
+    public List<Transacao> pesquisarPorData(LocalDate data) {
         return repository.findByData(data);
     }
 
-    public List<Transacao> pesquisarPorPeriodo(LocalDate inicio, LocalDate fim){
+    public List<Transacao> pesquisarPorPeriodo(LocalDate inicio, LocalDate fim) {
         if (inicio.isAfter(fim)) {
             throw new IllegalArgumentException(
                     "A data de início não pode ser maior que a data de fim."
             );
         }
-        return repository.findByDataBetween(inicio,fim);
+        return repository.findByDataBetween(inicio, fim);
     }
 
-    public SaldoResponseDTO calcularSaldo(){
+    public SaldoResponseDTO calcularSaldo() {
         List<Transacao> receitas = repository.findByTipo(Tipo.RECEITA);
         List<Transacao> despesas = repository.findByTipo(Tipo.DESPESA);
         double totalReceitas = 0;
         double totalDespesas = 0;
 
-        for(Transacao transacao : receitas){
+        for (Transacao transacao : receitas) {
             totalReceitas += transacao.getValor();
         }
 
-        for(Transacao transacao : despesas){
+        for (Transacao transacao : despesas) {
             totalDespesas += transacao.getValor();
         }
 
@@ -141,7 +141,7 @@ public class TransacaoService {
         return response;
     }
 
-    public SaldoResponseDTO calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim){
+    public SaldoResponseDTO calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim) {
         if (inicio.isAfter(fim)) {
             throw new IllegalArgumentException(
                     "A data de início não pode ser maior que a data de fim."
@@ -151,7 +151,7 @@ public class TransacaoService {
         double totalReceitas = 0;
         double totalDespesas = 0;
 
-        for(Transacao transacao : transacoes) {
+        for (Transacao transacao : transacoes) {
             if (transacao.getTipo() == Tipo.RECEITA) {
                 totalReceitas += transacao.getValor();
             }
@@ -169,13 +169,13 @@ public class TransacaoService {
         response.setSaldo(saldo);
 
         return response;
-        }
+    }
 
     public Page<Transacao> pesquisarPorTipoEPeriodo(Tipo tipo,
                                                     LocalDate inicio,
                                                     LocalDate fim,
-                                                    Pageable pageable){
-        if(inicio.isAfter(fim)) {
+                                                    Pageable pageable) {
+        if (inicio.isAfter(fim)) {
             throw new IllegalArgumentException(
                     "A data de início não pode ser maior que a data de fim."
             );
