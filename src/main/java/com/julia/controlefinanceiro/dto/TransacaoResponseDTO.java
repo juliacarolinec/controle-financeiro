@@ -10,6 +10,15 @@ public class TransacaoResponseDTO {
     private Double valor;
     private Tipo tipo;
     private LocalDate data;
+    private Long categoriaId;
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
+    }
 
     public Long getId() {
         return id;

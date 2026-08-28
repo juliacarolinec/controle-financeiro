@@ -18,6 +18,16 @@ public class TransacaoRequestDTO {
     private Tipo tipo;
     @NotNull
     private LocalDate data;
+    @NotNull
+    private Long categoriaId;
+
+    public Long getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Long categoriaId) {
+        this.categoriaId = categoriaId;
+    }
 
     public String getDescricao() {
         return descricao;

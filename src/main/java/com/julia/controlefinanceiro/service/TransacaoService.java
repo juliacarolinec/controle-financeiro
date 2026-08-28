@@ -3,8 +3,10 @@ package com.julia.controlefinanceiro.service;
 import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
+import com.julia.controlefinanceiro.model.Categoria;
 import com.julia.controlefinanceiro.model.Tipo;
 import com.julia.controlefinanceiro.model.Transacao;
+import com.julia.controlefinanceiro.repository.CategoriaRepository;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -17,8 +19,11 @@ public class TransacaoService {
 
     private final TransacaoRepository repository;
 
-    public TransacaoService(TransacaoRepository repository) {
+    private final CategoriaRepository categoriaRepository;
+
+    public TransacaoService(TransacaoRepository repository, CategoriaRepository categoriaRepository) {
         this.repository = repository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     public Page<Transacao> listarTransacoes(Pageable pageable){
@@ -37,6 +42,10 @@ public class TransacaoService {
         transacao.setValor(novaTransacao.getValor());
         transacao.setTipo(novaTransacao.getTipo());
         transacao.setData(novaTransacao.getData());
+        Categoria categoria = categoriaRepository
+                .findById(novaTransacao.getCategoriaId())
+                .orElse(null);
+        transacao.setCategoria(categoria);
 
         Transacao salva = repository.save(transacao);
 
@@ -47,6 +56,7 @@ public class TransacaoService {
         response.setValor(salva.getValor());
         response.setTipo(salva.getTipo());
         response.setData(salva.getData());
+        response.setCategoriaId(salva.getCategoria().getId());
 
         return response;
     }
@@ -98,6 +108,11 @@ public class TransacaoService {
     }
 
     public List<Transacao> pesquisarPorPeriodo(LocalDate inicio, LocalDate fim){
+        if (inicio.isAfter(fim)) {
+            throw new IllegalArgumentException(
+                    "A data de início não pode ser maior que a data de fim."
+            );
+        }
         return repository.findByDataBetween(inicio,fim);
     }
 
@@ -127,6 +142,11 @@ public class TransacaoService {
     }
 
     public SaldoResponseDTO calcularSaldoPorPeriodo(LocalDate inicio, LocalDate fim){
+        if (inicio.isAfter(fim)) {
+            throw new IllegalArgumentException(
+                    "A data de início não pode ser maior que a data de fim."
+            );
+        }
         List<Transacao> transacoes = repository.findByDataBetween(inicio, fim);
         double totalReceitas = 0;
         double totalDespesas = 0;
@@ -155,6 +175,11 @@ public class TransacaoService {
                                                     LocalDate inicio,
                                                     LocalDate fim,
                                                     Pageable pageable){
+        if(inicio.isAfter(fim)) {
+            throw new IllegalArgumentException(
+                    "A data de início não pode ser maior que a data de fim."
+            );
+        }
         return repository.findByTipoAndDataBetween(tipo, inicio, fim, pageable);
     }
 }
