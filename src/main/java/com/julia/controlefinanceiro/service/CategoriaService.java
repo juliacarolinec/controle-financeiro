@@ -9,6 +9,8 @@ import com.julia.controlefinanceiro.model.Tipo;
 import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.repository.CategoriaRepository;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,8 +27,8 @@ public class CategoriaService {
     }
 
 
-    public List<Categoria> listarCategorias() {
-        return repository.findAll();
+    public Page<Categoria> listarCategorias(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Categoria buscarCategoria(Long id) {

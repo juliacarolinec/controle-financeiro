@@ -6,12 +6,13 @@ import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.model.Categoria;
 import com.julia.controlefinanceiro.service.CategoriaService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 public class CategoriaController {
@@ -22,8 +23,8 @@ public class CategoriaController {
     }
 
     @GetMapping("/categorias")
-    public ResponseEntity<List<Categoria>> listarCategorias(){
-       List<Categoria> categorias = service.listarCategorias();
+    public ResponseEntity<Page<Categoria>> listarCategorias(Pageable pageable){
+       Page<Categoria> categorias = service.listarCategorias(pageable);
         if(!categorias.isEmpty()){
             return ResponseEntity.ok(categorias);
         }
@@ -33,10 +34,7 @@ public class CategoriaController {
     @GetMapping("/categorias/{id}")
     public ResponseEntity<Categoria> buscarCategoria(@PathVariable Long id){
         Categoria categoria = service.buscarCategoria(id);
-        if(categoria!=null){
-            return ResponseEntity.ok(categoria);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(categoria);
     }
 
     @PostMapping("/categorias")
