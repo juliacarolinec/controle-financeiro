@@ -19,4 +19,5 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
             Pageable pageable
     );
     boolean existsByCategoriaId(Long categoriaId);
+    List<Transacao> findByCategoriaId(Long categoriaId);
 }

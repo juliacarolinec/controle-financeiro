@@ -2,8 +2,11 @@ package com.julia.controlefinanceiro.service;
 
 import com.julia.controlefinanceiro.dto.CategoriaRequestDTO;
 import com.julia.controlefinanceiro.dto.CategoriaResponseDTO;
+import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.exception.CategoriaNotFoundException;
 import com.julia.controlefinanceiro.model.Categoria;
+import com.julia.controlefinanceiro.model.Tipo;
+import com.julia.controlefinanceiro.model.Transacao;
 import com.julia.controlefinanceiro.repository.CategoriaRepository;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
@@ -77,5 +80,35 @@ public class CategoriaService {
             throw new IllegalArgumentException("Não é possível excluir uma categoria que possui transações.");
         }
         repository.delete(categoria);
+    }
+
+    public SaldoResponseDTO calcularSaldoPorCategoria(Long categoriaId){
+        Categoria categoria = repository.findById(categoriaId)
+                .orElseThrow(() ->
+                        new CategoriaNotFoundException("Categoria não encontrada.")
+                );
+        List<Transacao> transacoes =
+                transacaoRepository.findByCategoriaId(categoriaId);
+
+        double totalReceitas = 0;
+        double totalDespesas = 0;
+
+        for(Transacao transacao : transacoes){
+            if(transacao.getTipo() == Tipo.RECEITA){
+                totalReceitas += transacao.getValor();
+            }
+            if(transacao.getTipo() == Tipo.DESPESA){
+                totalDespesas += transacao.getValor();
+            }
+        }
+        double saldo = totalReceitas - totalDespesas;
+
+        SaldoResponseDTO response = new SaldoResponseDTO();
+
+        response.setReceitas(totalReceitas);
+        response.setDespesas(totalDespesas);
+        response.setSaldo(saldo);
+
+        return response;
     }
 }

@@ -2,6 +2,7 @@ package com.julia.controlefinanceiro.controller;
 
 import com.julia.controlefinanceiro.dto.CategoriaRequestDTO;
 import com.julia.controlefinanceiro.dto.CategoriaResponseDTO;
+import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.model.Categoria;
 import com.julia.controlefinanceiro.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -58,5 +59,11 @@ public class CategoriaController {
     public ResponseEntity<Void> deletarCategoria(@PathVariable Long id){
         service.deletarCategoria(id);
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/categorias/{id}/saldo")
+    public ResponseEntity<SaldoResponseDTO> calcularSaldoPorId(@PathVariable Long id){
+        SaldoResponseDTO saldo = service.calcularSaldoPorCategoria(id);
+        return ResponseEntity.ok(saldo);
     }
 }
