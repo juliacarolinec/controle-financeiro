@@ -49,10 +49,7 @@ public class CategoriaController {
     public ResponseEntity<CategoriaResponseDTO> alterarCategoria(@PathVariable Long id,
                                       @Valid @RequestBody CategoriaRequestDTO categoriaAlterada){
         CategoriaResponseDTO categoria = service.alterarCategoria(id, categoriaAlterada);
-        if(categoria!=null){
-            return ResponseEntity.ok(categoria);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(categoria);
     }
 
     @DeleteMapping("/categorias/{id}")

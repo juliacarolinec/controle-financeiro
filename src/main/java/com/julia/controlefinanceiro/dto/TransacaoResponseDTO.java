@@ -2,12 +2,13 @@ package com.julia.controlefinanceiro.dto;
 
 import com.julia.controlefinanceiro.model.Tipo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TransacaoResponseDTO {
     private Long id;
     private String descricao;
-    private Double valor;
+    private BigDecimal valor;
     private Tipo tipo;
     private LocalDate data;
     private Long categoriaId;
@@ -36,11 +37,11 @@ public class TransacaoResponseDTO {
         this.descricao = descricao;
     }
 
-    public Double getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 

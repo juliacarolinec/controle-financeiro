@@ -12,6 +12,7 @@ import com.julia.controlefinanceiro.repository.CategoriaRepository;
 import com.julia.controlefinanceiro.repository.TransacaoRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class TransacaoService {
         response.setValor(atualizada.getValor());
         response.setTipo(atualizada.getTipo());
         response.setData(atualizada.getData());
+        response.setCategoriaId(atualizada.getCategoria().getId());
 
         return response;
     }
@@ -119,18 +121,18 @@ public class TransacaoService {
     public SaldoResponseDTO calcularSaldo() {
         List<Transacao> receitas = repository.findByTipo(Tipo.RECEITA);
         List<Transacao> despesas = repository.findByTipo(Tipo.DESPESA);
-        double totalReceitas = 0;
-        double totalDespesas = 0;
+        BigDecimal totalReceitas = BigDecimal.ZERO;
+        BigDecimal totalDespesas = BigDecimal.ZERO;
 
         for (Transacao transacao : receitas) {
-            totalReceitas += transacao.getValor();
+            totalReceitas = totalReceitas.add(transacao.getValor());
         }
 
         for (Transacao transacao : despesas) {
-            totalDespesas += transacao.getValor();
+            totalDespesas = totalDespesas.add(transacao.getValor());
         }
 
-        double saldo = totalReceitas - totalDespesas;
+        BigDecimal saldo =  totalReceitas.subtract(totalDespesas);
 
         SaldoResponseDTO response = new SaldoResponseDTO();
 
@@ -148,20 +150,20 @@ public class TransacaoService {
             );
         }
         List<Transacao> transacoes = repository.findByDataBetween(inicio, fim);
-        double totalReceitas = 0;
-        double totalDespesas = 0;
+        BigDecimal totalReceitas = BigDecimal.ZERO;
+        BigDecimal totalDespesas = BigDecimal.ZERO;
 
         for (Transacao transacao : transacoes) {
             if (transacao.getTipo() == Tipo.RECEITA) {
-                totalReceitas += transacao.getValor();
+                totalReceitas = totalReceitas.add(transacao.getValor());
             }
 
             if (transacao.getTipo() == Tipo.DESPESA) {
-                totalDespesas += transacao.getValor();
+                totalDespesas = totalDespesas.add(transacao.getValor());
             }
         }
 
-        double saldo = totalReceitas - totalDespesas;
+        BigDecimal saldo = totalReceitas.subtract(totalDespesas);
 
         SaldoResponseDTO response = new SaldoResponseDTO();
         response.setReceitas(totalReceitas);
