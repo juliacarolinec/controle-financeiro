@@ -1,5 +1,6 @@
 package com.julia.controlefinanceiro.service;
 
+import com.julia.controlefinanceiro.dto.CategoriaResponseDTO;
 import com.julia.controlefinanceiro.dto.SaldoResponseDTO;
 import com.julia.controlefinanceiro.dto.TransacaoRequestDTO;
 import com.julia.controlefinanceiro.dto.TransacaoResponseDTO;
@@ -31,12 +32,47 @@ public class TransacaoService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Page<Transacao> listarTransacoes(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<TransacaoResponseDTO> listarTransacoes(Pageable pageable) {
+        Page<Transacao> transacoes = repository.findAll(pageable);
+
+        return transacoes.map(transacao -> {
+
+            TransacaoResponseDTO response = new TransacaoResponseDTO();
+
+            response.setId(transacao.getId());
+            response.setDescricao(transacao.getDescricao());
+            response.setValor(transacao.getValor());
+            response.setTipo(transacao.getTipo());
+            response.setData(transacao.getData());
+
+            CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+            categoriaResponse.setId(transacao.getCategoria().getId());
+            categoriaResponse.setNome(transacao.getCategoria().getNome());
+
+            response.setCategoria(categoriaResponse);
+
+            return response;
+        });
     }
 
-    public Transacao buscarTransacao(Long id) {
-        return repository.findById(id).orElseThrow(() -> new TransacaoNotFoundException("Transação não encontrada."));
+    public TransacaoResponseDTO buscarTransacao(Long id) {
+        Transacao transacao = repository.findById(id).orElseThrow(() -> new TransacaoNotFoundException("Transação não encontrada."));
+
+        TransacaoResponseDTO response = new TransacaoResponseDTO();
+
+        response.setId(transacao.getId());
+        response.setDescricao(transacao.getDescricao());
+        response.setValor(transacao.getValor());
+        response.setTipo(transacao.getTipo());
+        response.setData(transacao.getData());
+
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+        categoriaResponse.setId(transacao.getCategoria().getId());
+        categoriaResponse.setNome(transacao.getCategoria().getNome());
+
+        response.setCategoria(categoriaResponse);
+
+        return response;
     }
 
     public TransacaoResponseDTO adicionarNovaTransacao(TransacaoRequestDTO novaTransacao) {
@@ -55,14 +91,17 @@ public class TransacaoService {
         Transacao salva = repository.save(transacao);
 
         TransacaoResponseDTO response = new TransacaoResponseDTO();
-
         response.setId(salva.getId());
         response.setDescricao(salva.getDescricao());
         response.setValor(salva.getValor());
         response.setTipo(salva.getTipo());
         response.setData(salva.getData());
-        response.setCategoriaId(salva.getCategoria().getId());
 
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+        categoriaResponse.setId(salva.getCategoria().getId());
+        categoriaResponse.setNome(salva.getCategoria().getNome());
+
+        response.setCategoria(categoriaResponse);
         return response;
     }
 
@@ -89,8 +128,13 @@ public class TransacaoService {
         response.setValor(atualizada.getValor());
         response.setTipo(atualizada.getTipo());
         response.setData(atualizada.getData());
-        response.setCategoriaId(atualizada.getCategoria().getId());
 
+        CategoriaResponseDTO categoriaResponse = new CategoriaResponseDTO();
+
+        categoriaResponse.setId(atualizada.getCategoria().getId());
+        categoriaResponse.setNome(atualizada.getCategoria().getNome());
+
+        response.setCategoria(categoriaResponse);
         return response;
     }
 

@@ -114,4 +114,9 @@ public class CategoriaService {
 
         return response;
     }
+
+    public Page<Categoria> buscarPorNome(String nome, Pageable pageable){
+
+        return repository.findByNomeContainingIgnoreCase(nome, pageable);
+    }
 }

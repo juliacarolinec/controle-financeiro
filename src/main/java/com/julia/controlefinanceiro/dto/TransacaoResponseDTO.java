@@ -11,14 +11,14 @@ public class TransacaoResponseDTO {
     private BigDecimal valor;
     private Tipo tipo;
     private LocalDate data;
-    private Long categoriaId;
+    private CategoriaResponseDTO categoria;
 
-    public Long getCategoriaId() {
-        return categoriaId;
+    public CategoriaResponseDTO getCategoria() {
+        return categoria;
     }
 
-    public void setCategoriaId(Long categoriaId) {
-        this.categoriaId = categoriaId;
+    public void setCategoria(CategoriaResponseDTO categoria) {
+        this.categoria = categoria;
     }
 
     public Long getId() {

@@ -10,11 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-
-@Controller
+@RestController
 public class CategoriaController {
     private final CategoriaService service;
 
@@ -60,5 +58,10 @@ public class CategoriaController {
     public ResponseEntity<SaldoResponseDTO> calcularSaldoPorId(@PathVariable Long id){
         SaldoResponseDTO saldo = service.calcularSaldoPorCategoria(id);
         return ResponseEntity.ok(saldo);
+    }
+
+    @GetMapping("/categorias/nome")
+    public Page<Categoria> buscarPorNome (@RequestParam String nome, Pageable pageable){
+        return service.buscarPorNome(nome, pageable);
     }
 }

@@ -25,8 +25,8 @@ public class TransacaoController {
     }
 
     @GetMapping("/transacoes")
-    public ResponseEntity<Page<Transacao>> listarTransacoes(Pageable pageable){
-        Page<Transacao> transacoes = service.listarTransacoes(pageable);
+    public ResponseEntity<Page<TransacaoResponseDTO>> listarTransacoes(Pageable pageable){
+        Page<TransacaoResponseDTO> transacoes = service.listarTransacoes(pageable);
         if(!transacoes.isEmpty()){
             return ResponseEntity.ok(transacoes);
         }
@@ -34,13 +34,9 @@ public class TransacaoController {
     }
 
     @GetMapping("/transacoes/{id}")
-    public ResponseEntity<Transacao> buscarTransacao(@PathVariable Long id){
-
-        Transacao transacao = service.buscarTransacao(id);
-        if(transacao!=null){
-            return ResponseEntity.ok(transacao);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<TransacaoResponseDTO> buscarTransacao(@PathVariable Long id){
+        TransacaoResponseDTO transacao = service.buscarTransacao(id);
+        return ResponseEntity.ok(transacao);
     }
 
     @PostMapping("/transacoes")
