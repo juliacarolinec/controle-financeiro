@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -42,8 +45,8 @@ public class TransacaoController {
     @PostMapping("/transacoes")
     public ResponseEntity<TransacaoResponseDTO> adicionarNovaTransacao(@Valid @RequestBody TransacaoRequestDTO novaTransacao){
         TransacaoResponseDTO transacao = service.adicionarNovaTransacao(novaTransacao);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(transacao);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(transacao.getId()).toUri();
+        return ResponseEntity.created(location).body(transacao);
     }
 
     @PutMapping("/transacoes/{id}")
@@ -76,7 +79,7 @@ public class TransacaoController {
     }
 
     @GetMapping("/transacoes/periodo")
-    public List<Transacao> pesquisarPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
+    public List<Transacao> pesquisarTransacoesPorPeriodo(@RequestParam LocalDate inicio, @RequestParam LocalDate fim){
         return service.pesquisarPorPeriodo(inicio, fim);
     }
 

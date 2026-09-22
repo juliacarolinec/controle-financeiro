@@ -4,15 +4,30 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
+@Table(schema = "public")
+@EntityListeners(AuditingEntityListener.class)
 public class Transacao {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transacao_seq")
+    @SequenceGenerator(
+            name = "transacao_seq",
+            sequenceName = "transacao_seq",
+            allocationSize = 1
+    )
     private Long id;
     @NotBlank
     private String descricao;
@@ -27,55 +42,13 @@ public class Transacao {
     @ManyToOne
     @JoinColumn(name="categoria_id")
     private Categoria categoria;
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
+    @CreatedDate
+    @Column(name="data_cadastro")
+    private LocalDateTime criadoEm;
+    @LastModifiedDate
+    @Column(name="data_atualizacao")
+    private LocalDateTime atualizadoEm;
     public Transacao() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
 }

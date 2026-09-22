@@ -4,10 +4,12 @@ import com.julia.controlefinanceiro.model.Tipo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 public class TransacaoRequestDTO {
 
     @NotBlank
@@ -22,43 +24,4 @@ public class TransacaoRequestDTO {
     @NotNull
     private Long categoriaId;
 
-    public Long getCategoriaId() {
-        return categoriaId;
-    }
-
-    public void setCategoriaId(Long categoriaId) {
-        this.categoriaId = categoriaId;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
 }
