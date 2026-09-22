@@ -17,6 +17,7 @@ Este projeto está sendo desenvolvido com foco em aprendizado prático de desenv
 - Cálculo de receitas, despesas e saldo por período
 - Validação do intervalo de datas
 - Tratamento global de exceções
+- Retorno de header Location na criação de recursos
 
 ### 💡 Conceitos aplicados
 
@@ -31,7 +32,7 @@ Este projeto está sendo desenvolvido com foco em aprendizado prático de desenv
 - Enum
 - Códigos HTTP
 - Tratamento global de exceções
-
+- Auditoria de entidades
 
 ### 🛠️ Tecnologias
 
@@ -39,14 +40,23 @@ Este projeto está sendo desenvolvido com foco em aprendizado prático de desenv
 - Spring Boot
 - Spring Web
 - Spring Data JPA
-- H2 Database
+- PostgreSQL
+- Lombok
 - Maven
 - Git & GitHub
-  
-🎯 Objetivo
+
+### 🎯 Objetivo
 
 Desenvolver uma aplicação Back-End completa, utilizando boas práticas de desenvolvimento e consolidando conhecimentos em Java, Spring Boot e desenvolvimento de APIs REST.
 
-📖 Status do projeto
+### ⚙️ Como executar
+
+1. Clone o repositório
+2. Suba o banco de dados PostgreSQL via Docker:
+3. Configure as variáveis de conexão em `application.properties` (ou `application.yml`)
+4. Execute a aplicação:
+
+### 📖 Status do projeto
 
 🚧 Em desenvolvimento
+
